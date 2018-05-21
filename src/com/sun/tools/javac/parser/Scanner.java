@@ -412,6 +412,7 @@ public class Scanner implements Lexer {
     }
 
     /** Read fractional part of floating point number.
+     * 读取科学计数法
      */
     private void scanFraction() {
         while (digit(10) >= 0) {
@@ -457,6 +458,7 @@ public class Scanner implements Lexer {
     }
 
     /** Read fractional part and 'd' or 'f' suffix of floating point number.
+     * 获取浮点型数值
      */
     private void scanHexFractionAndSuffix(boolean seendigit) {
         this.radix = 16;
@@ -474,7 +476,7 @@ public class Scanner implements Lexer {
             scanHexExponentAndSuffix();
     }
 
-    /** Read a number.
+    /** Read a number.整型数值
      *  @param radix  The radix of the number; one of 8, 10, 16.
      */
     private void scanNumber(int radix) {
@@ -537,6 +539,8 @@ public class Scanner implements Lexer {
             case '$': case '_':
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
+            // \u0000 ->空格,空白符;\u0001->标题开始符;\u0005->|;\u0006>-;\u0007->大圆点
+            // \u0008;\u0009->tab键;
             case '\u0000': case '\u0001': case '\u0002': case '\u0003':
             case '\u0004': case '\u0005': case '\u0006': case '\u0007':
             case '\u0008': case '\u000E': case '\u000F': case '\u0010':
@@ -613,6 +617,7 @@ public class Scanner implements Lexer {
     }
 
     /** Return true if ch can be part of an operator.
+     * 是否为特殊字符,比如运算符 ||是两个|,&&是两个&
      */
     private boolean isSpecial(char ch) {
         switch (ch) {
@@ -858,6 +863,10 @@ public class Scanner implements Lexer {
                     scanChar(); token = RBRACE; return;
                 case '/':
                     scanChar();
+                    /*
+                    * 说的是/的几种情况,\/**\/,\/***\/,\/\/,以及/=和/
+                    * 三种注解方式,块注解,JAVADOC注解以及行注解
+                    * */
                     if (ch == '/') {
                     	//注解
                         do {
@@ -895,11 +904,11 @@ public class Scanner implements Lexer {
                             lexError("unclosed.comment");
                             return;
                         }
-                    } else if (ch == '=') {
+                    } else if (ch == '=') {//=号的转义
                         name = names.slashequals;
                         token = SLASHEQ;
                         scanChar();
-                    } else {
+                    } else {//表示/
                         name = names.slash;
                         token = SLASH;
                     }
