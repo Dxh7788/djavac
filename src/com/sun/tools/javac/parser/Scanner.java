@@ -511,7 +511,7 @@ public class Scanner implements Lexer {
     }
 
     /**
-	 * 读取一个标识符
+	 * 获取一个标识符 scan identifier
      */
     private void scanIdent() {
         boolean isJavaIdentifierPart;
