@@ -69,7 +69,7 @@ public class Code {
     final Types types;
     final Symtab syms;
 
-/*---------- classfile fields: --------------- */
+/*---------- classfile fields:类属性 --------------- */
 
     /** The maximum stack size.
      */
@@ -120,7 +120,7 @@ public class Code {
      */
     public CRTable crt;
 
-/*---------- internal fields: --------------- */
+/*---------- internal fields:内部属性 --------------- */
 
     /** Are we generating code with jumps >= 32K?
      */
