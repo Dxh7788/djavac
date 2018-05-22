@@ -445,7 +445,7 @@ public class Code {
         state.push(mtype.getReturnType());
     }
 
-    /** Emit an invokevirtual instruction.
+    /** Emit an invokevirtual instruction. 虚函数,也就是实例方法
      */
     public void emitInvokevirtual(int meth, Type mtype) {
         int argsize = width(mtype.getParameterTypes());
@@ -456,7 +456,7 @@ public class Code {
         state.push(mtype.getReturnType());
     }
 
-    /** Emit an opcode with no operand field.
+    /** Emit an opcode with no operand field. 0元操作符,没有参数.
      */
     public void emitop0(int op) {
         emitop(op);
@@ -857,7 +857,7 @@ public class Code {
         postop();
     }
 
-    /** Emit an opcode with a one-byte operand field.
+    /** Emit an opcode with a one-byte operand field.一元操作符,比如: bipush 10；
      */
     public void emitop1(int op, int od) {
         emitop(op);
@@ -889,7 +889,7 @@ public class Code {
     }
 
     /** Emit an opcode with a one-byte operand field;
-     *  widen if field does not fit in a byte.
+     *  widen if field does not fit in a byte.一元宽操作符
      */
     public void emitop1w(int op, int od) {
         if (od > 0xFF) {
@@ -1967,6 +1967,7 @@ public class Code {
         return Mneumonics.mnem[opcode];
     }
 
+    //助记符
     private static class Mneumonics {
         private final static String[] mnem = new String[ByteCodeCount];
         static {
