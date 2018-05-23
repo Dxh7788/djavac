@@ -59,7 +59,11 @@ public enum Source {
     JDK1_5("1.5"),
 
     /** 1.6 reports encoding problems as errors instead of warnings. */
-    JDK1_6("1.6");
+    JDK1_6("1.6"),
+
+    JDK1_7("1.7"),
+
+    JDK1_8("1.8");
 
     private static final Context.Key<Source> sourceKey
         = new Context.Key<Source>();
@@ -85,6 +89,7 @@ public enum Source {
         }
         tab.put("5", JDK1_5); // Make 5 an alias for 1.5
         tab.put("6", JDK1_6); // Make 6 an alias for 1.6
+        tab.put("7", JDK1_7); // Make 6 an alias for 1.7
     }
 
     private Source(String name) {
@@ -98,6 +103,7 @@ public enum Source {
     }
 
     public Target requiredTarget() {
+        if (this.compareTo(JDK1_7) >= 0) return Target.JDK1_7;
         if (this.compareTo(JDK1_6) >= 0) return Target.JDK1_6;
         if (this.compareTo(JDK1_5) >= 0) return Target.JDK1_5;
         if (this.compareTo(JDK1_4) >= 0) return Target.JDK1_4;
@@ -160,6 +166,8 @@ public enum Source {
             return RELEASE_5;
         case JDK1_6:
             return RELEASE_6;
+        case JDK1_7:
+            return RELEASE_7;
         default:
             return null;
         }

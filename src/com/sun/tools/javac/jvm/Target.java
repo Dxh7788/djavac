@@ -61,7 +61,8 @@ public enum Target {
     JDK1_5("1.5", 49, 0),
 
     /** JDK 6. */
-    JDK1_6("1.6", 50, 0);
+    JDK1_6("1.6", 50, 0),
+    JDK1_7("1.7", 51, 0);
 
     private static final Context.Key<Target> targetKey =
         new Context.Key<Target>();
@@ -93,6 +94,7 @@ public enum Target {
         }
         tab.put("5", JDK1_5);
         tab.put("6", JDK1_6);
+        tab.put("7", JDK1_7); // Make 6 an alias for 1.7
     }
 
     public final String name;
@@ -104,7 +106,7 @@ public enum Target {
         this.minorVersion = minorVersion;
     }
 
-    public static final Target DEFAULT = JDK1_6;
+    public static final Target DEFAULT = JDK1_7;
 
     public static Target lookup(String name) {
         return tab.get(name);
