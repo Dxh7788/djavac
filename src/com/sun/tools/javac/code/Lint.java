@@ -129,42 +129,50 @@ public class Lint
     public enum LintCategory {
         /**
          * Warn about use of unnecessary casts.
+         * 存在强转
          */
         CAST("cast"),
 
         /**
          * Warn about use of deprecated items.
+         * 使用过时的项目
          */
         DEPRECATION("deprecation"),
 
         /**
          * Warn about items which are documented with an {@code @deprecated} JavaDoc
          * comment, but which do not have {@code @Deprecated} annotation.
+         * JavaDoc有过时标志,但相应代码处没有过时注解
          */
         DEP_ANN("dep-ann"),
 
         /**
          * Warn about division by constant integer 0.
+         * 除数为0
          */
         DIVZERO("divzero"),
 
         /**
          * Warn about empty statement after if.
+         * if后边为空
          */
         EMPTY("empty"),
 
         /**
          * Warn about falling through from one case of a switch statement to the next.
+         * switch穿透
          */
         FALLTHROUGH("fallthrough"),
 
         /**
          * Warn about finally clauses that do not terminate normally.
+         * finally子句没有正常结束
          */
         FINALLY("finally"),
 
         /**
          * Warn about issues regarding method overrides.
+         * 没有overriders标志
          */
         OVERRIDES("overrides"),
 
@@ -177,6 +185,7 @@ public class Lint
 
         /**
          * Warn about Serializable classes that do not provide a serial version ID.
+         * 没有给序列化id
          */
         SERIAL("serial"),
 
