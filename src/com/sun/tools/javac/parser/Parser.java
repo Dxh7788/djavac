@@ -686,17 +686,17 @@ public class Parser {
 			JCExpression t1 = term();
 			return toP(F.at(pos).Assign(t, t1));
 		}
-		case PLUSEQ:
-		case SUBEQ:
-		case STAREQ:
-		case SLASHEQ:
-		case PERCENTEQ:
-		case AMPEQ:
-		case BAREQ:
-		case CARETEQ:
-		case LTLTEQ:
-		case GTGTEQ:
-		case GTGTGTEQ:
+		case PLUSEQ://+=
+		case SUBEQ://-=
+		case STAREQ://*=
+		case SLASHEQ:///=
+		case PERCENTEQ://%=
+		case AMPEQ://&=
+		case BAREQ://|=
+		case CARETEQ://^=
+		case LTLTEQ://<<=
+		case GTGTEQ://>>=
+		case GTGTGTEQ://>>>=
 			int pos = S.pos();
 			Token token = S.token();
 			S.nextToken();
