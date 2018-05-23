@@ -116,21 +116,33 @@ public class Flags {
 
     /** Flag is set if symbol is deprecated.
      */
+    /*
+    * symbol是否弃用的标志
+    * */
     public static final int DEPRECATED   = 1<<17;
 
     /** Flag is set for a variable symbol if the variable's definition
      *  has an initializer part.
      */
+    /*
+    * 变量是否有初始化的标志
+    * */
     public static final int HASINIT          = 1<<18;
 
     /** Flag is set for compiler-generated anonymous method symbols
      *  that `own' an initializer block.
      */
+    /*
+    * 匿名方法生成自己的初始化块
+    * */
     public static final int BLOCK            = 1<<20;
 
     /** Flag is set for compiler-generated abstract methods that implement
      *  an interface method (Miranda methods).
      */
+    /*
+    * 这个是编译器生成实现了接口的抽象方法
+    * */
     public static final int IPROXY           = 1<<21;
 
     /** Flag is set for nested classes that do not access instance members
@@ -145,6 +157,9 @@ public class Flags {
     /** Flag is set for package symbols if a package has a member or
      *  directory and therefore exists.
      */
+    /*
+    * 包的成员是否已经存在或者包已经存在
+    * */
     public static final int EXISTS           = 1<<23;
 
     /** Flag is set for compiler-generated compound classes
@@ -154,11 +169,17 @@ public class Flags {
 
     /** Flag is set for class symbols if a class file was found for this class.
      */
+    /*
+    * 告知此类的类文件是否存在
+    * */
     public static final int CLASS_SEEN   = 1<<25;
 
     /** Flag is set for class symbols if a source file was found for this
      *  class.
      */
+    /*
+    * 此类的源文件是否存在
+    * */
     public static final int SOURCE_SEEN  = 1<<26;
 
     /* State flags (are reset during compilation).
@@ -183,18 +204,30 @@ public class Flags {
     /** Flag for class symbols to indicate it has been checked and found
      *  acyclic.
      */
+    /*
+    * 标志类记号是否是已检查或者非循环发现过
+    * */
     public static final int ACYCLIC          = 1<<30;
 
     /** Flag that marks bridge methods.
      */
+    /*
+    * 是否桥接方法
+    * */
     public static final long BRIDGE          = 1L<<31;
 
     /** Flag that marks formal parameters.
      */
+    /*
+    * 正常变量标志
+    * */
     public static final long PARAMETER   = 1L<<33;
 
     /** Flag that marks varargs methods.
      */
+    /*
+    * 数组方法
+    * */
     public static final long VARARGS   = 1L<<34;
 
     /** Flag for annotation type symbols to indicate it has been
@@ -204,6 +237,9 @@ public class Flags {
 
     /** Flag that marks a generated default constructor.
      */
+    /*
+    * 是否生成默认构造器
+    * */
     public static final long GENERATEDCONSTR   = 1L<<36;
 
     /** Flag that marks a hypothetical method that need not really be
@@ -219,6 +255,14 @@ public class Flags {
 
     /** Modifier masks.
      */
+    /*
+    * 不同的文件的flag声明组合
+    * 访问权限flag是PUBLIC | PROTECTED | PRIVATE
+    * 类文件的flag包括LocalClassFlags | INTERFACE | PUBLIC | ANNOTATION,
+    * 变量的flag包括AccessFlags | FINAL | STATIC | VOLATILE | TRANSIENT | ENUM
+    * 构造器只能使用 PUBLIC | PROTECTED | PRIVATE中的一个
+    *
+    * */
     public static final int
         AccessFlags           = PUBLIC | PROTECTED | PRIVATE,
         LocalClassFlags       = FINAL | ABSTRACT | STRICTFP | ENUM | SYNTHETIC,
@@ -232,7 +276,7 @@ public class Flags {
         MethodFlags           = AccessFlags | ABSTRACT | STATIC | NATIVE |
                                 SYNCHRONIZED | FINAL | STRICTFP;
     public static final long
-        LocalVarFlags         = FINAL | PARAMETER;
+        LocalVarFlags         = FINAL | PARAMETER;//本地参数只能使用final和parameter
 
     public static Set<Modifier> asModifierSet(long flags) {
         Set<Modifier> modifiers = modifierSets.get(flags);
