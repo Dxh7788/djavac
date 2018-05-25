@@ -190,30 +190,31 @@ public class TreeMaker implements JCTree.Factory {
         return tree;
     }
 
+    //;表达式结束符
     public JCSkip Skip() {
         JCSkip tree = new JCSkip();
         tree.pos = pos;
         return tree;
     }
-
+    //语义块
     public JCBlock Block(long flags, List<JCStatement> stats) {
         JCBlock tree = new JCBlock(flags, stats);
         tree.pos = pos;
         return tree;
     }
-
+    //do while(),body+表达式
     public JCDoWhileLoop DoLoop(JCStatement body, JCExpression cond) {
         JCDoWhileLoop tree = new JCDoWhileLoop(body, cond);
         tree.pos = pos;
         return tree;
     }
-
+    //while(),表达式+body
     public JCWhileLoop WhileLoop(JCExpression cond, JCStatement body) {
         JCWhileLoop tree = new JCWhileLoop(cond, body);
         tree.pos = pos;
         return tree;
     }
-
+    //for循环,JCStatement列表,条件表达式,运算表达式列表,以及body四个部分
     public JCForLoop ForLoop(List<JCStatement> init,
                            JCExpression cond,
                            List<JCExpressionStatement> step,
@@ -223,49 +224,49 @@ public class TreeMaker implements JCTree.Factory {
         tree.pos = pos;
         return tree;
     }
-
+    //加强for循环foreach,变量声明+表达式以及body
     public JCEnhancedForLoop ForeachLoop(JCVariableDecl var, JCExpression expr, JCStatement body) {
         JCEnhancedForLoop tree = new JCEnhancedForLoop(var, expr, body);
         tree.pos = pos;
         return tree;
     }
-
+    //label+body
     public JCLabeledStatement Labelled(Name label, JCStatement body) {
         JCLabeledStatement tree = new JCLabeledStatement(label, body);
         tree.pos = pos;
         return tree;
     }
-
+    //switch表达式,selector表达式以及Case列表
     public JCSwitch Switch(JCExpression selector, List<JCCase> cases) {
         JCSwitch tree = new JCSwitch(selector, cases);
         tree.pos = pos;
         return tree;
     }
-
+    //表达式+statement列表
     public JCCase Case(JCExpression pat, List<JCStatement> stats) {
         JCCase tree = new JCCase(pat, stats);
         tree.pos = pos;
         return tree;
     }
-
+    //Synchronized=lock+body
     public JCSynchronized Synchronized(JCExpression lock, JCBlock body) {
         JCSynchronized tree = new JCSynchronized(lock, body);
         tree.pos = pos;
         return tree;
     }
-
+    //try=body+catch列表+final
     public JCTry Try(JCBlock body, List<JCCatch> catchers, JCBlock finalizer) {
         JCTry tree = new JCTry(body, catchers, finalizer);
         tree.pos = pos;
         return tree;
     }
-
+    //catch=变量声明+body
     public JCCatch Catch(JCVariableDecl param, JCBlock body) {
         JCCatch tree = new JCCatch(param, body);
         tree.pos = pos;
         return tree;
     }
-
+    //三元运算符,Conditional=cond+thenpart+elsepart
     public JCConditional Conditional(JCExpression cond,
                                    JCExpression thenpart,
                                    JCExpression elsepart)
@@ -274,7 +275,7 @@ public class TreeMaker implements JCTree.Factory {
         tree.pos = pos;
         return tree;
     }
-
+    //
     public JCIf If(JCExpression cond, JCStatement thenpart, JCStatement elsepart) {
         JCIf tree = new JCIf(cond, thenpart, elsepart);
         tree.pos = pos;
