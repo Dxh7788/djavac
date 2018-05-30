@@ -2061,44 +2061,44 @@ public class Parser {
 		loop: while (true) {
 			long flag;
 			switch (S.token()) {
-			case PRIVATE:
-				flag = Flags.PRIVATE;
-				break;
-			case PROTECTED:
-				flag = Flags.PROTECTED;
-				break;
-			case PUBLIC:
-				flag = Flags.PUBLIC;
-				break;
-			case STATIC:
-				flag = Flags.STATIC;
-				break;
-			case TRANSIENT:
-				flag = Flags.TRANSIENT;
-				break;
-			case FINAL:
-				flag = Flags.FINAL;
-				break;
-			case ABSTRACT:
-				flag = Flags.ABSTRACT;
-				break;
-			case NATIVE:
-				flag = Flags.NATIVE;
-				break;
-			case VOLATILE:
-				flag = Flags.VOLATILE;
-				break;
-			case SYNCHRONIZED:
-				flag = Flags.SYNCHRONIZED;
-				break;
-			case STRICTFP:
-				flag = Flags.STRICTFP;
-				break;
-			case MONKEYS_AT:
-				flag = Flags.ANNOTATION;
-				break;
-			default:
-				break loop;
+				case PRIVATE:
+					flag = Flags.PRIVATE;
+					break;
+				case PROTECTED:
+					flag = Flags.PROTECTED;
+					break;
+				case PUBLIC:
+					flag = Flags.PUBLIC;
+					break;
+				case STATIC:
+					flag = Flags.STATIC;
+					break;
+				case TRANSIENT:
+					flag = Flags.TRANSIENT;
+					break;
+				case FINAL:
+					flag = Flags.FINAL;
+					break;
+				case ABSTRACT:
+					flag = Flags.ABSTRACT;
+					break;
+				case NATIVE:
+					flag = Flags.NATIVE;
+					break;
+				case VOLATILE:
+					flag = Flags.VOLATILE;
+					break;
+				case SYNCHRONIZED:
+					flag = Flags.SYNCHRONIZED;
+					break;
+				case STRICTFP:
+					flag = Flags.STRICTFP;
+					break;
+				case MONKEYS_AT:
+					flag = Flags.ANNOTATION;
+					break;
+				default:
+					break loop;
 			}
 			if ((flags & flag) != 0)
 				log.error(S.pos(), "repeated.modifier");
