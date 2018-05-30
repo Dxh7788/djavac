@@ -7,7 +7,7 @@ package com.djava;
 public class En {
 
     public static void main(String[] args) {
-        int m = 5;
+        int m = 0;
 
         loop:while (true) {
             switch (m) {
@@ -24,11 +24,14 @@ public class En {
                     System.out.println("3");
                     break ;
                 case 4:
+                    System.out.println("4");
                     break ;
                 default:
                     break loop;
             }
+            System.out.println("loop_"+m);
+            m++;
         }
-        System.out.println("loop");
+        System.out.println("loop_end");
     }
 }
