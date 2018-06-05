@@ -648,6 +648,7 @@ public class Parser {
 		return term(TYPE);
 	}
 
+	//term是运算表达式
 	JCExpression term(int newmode) {
 		int prevmode = mode;
 		mode = newmode;
@@ -2316,7 +2317,7 @@ public class Parser {
 	 */
 	public JCTree.JCCompilationUnit compilationUnit() {
 		/**
-		 * S是Scanner(Lexer)对象 pos是Toke序列当前的位置
+		 * S是Scanner(Lexer)对象 pos是Token序列当前的位置
 		 */
 		int pos = S.pos();
 		JCExpression pid = null;
@@ -2497,22 +2498,28 @@ public class Parser {
 	 */
 	JCClassDecl classDeclaration(JCModifiers mods, String dc) {
 		int pos = S.pos();
-		accept(CLASS);
+		accept(CLASS);//使用Accept的原因在于1.读取class的名称2.如果文件有错,则输出错误.
 		Name name = ident(); //类名
 
 		List<JCTypeParameter> typarams = typeParametersOpt(); //泛型
 
 		JCTree extending = null;
+		/*
+		* 解析继承关系,找到父类
+		* */
 		if (S.token() == EXTENDS) {
 			S.nextToken();
-			extending = type();  //父类
+			extending = type();
 		}
+		//解析实现的接口列表
 		List<JCExpression> implementing = List.nil();
 		if (S.token() == IMPLEMENTS) {
 			S.nextToken();
 			implementing = typeList(); //接口
 		}
+		//找到class的body实现
 		List<JCTree> defs = classOrInterfaceBody(name, false); //类的实现体(内容)
+		//挂在抽象语法树上
 		JCClassDecl result = toP(F.at(pos).ClassDef(mods, name, typarams,
 				extending, implementing, defs));
 		attach(result, dc);
@@ -2714,15 +2721,15 @@ public class Parser {
 			JCModifiers mods = modifiersOpt();
 			if (S.token() == CLASS || S.token() == INTERFACE || allowEnums
 					&& S.token() == ENUM) {
-				/**
-				 * 内部类
+				/*
+				 * 内部类,隐藏的递归关系
 				 */
 				return List.<JCTree> of(classOrInterfaceOrEnumDeclaration(mods,
 						dc));
 			} else if (S.token() == LBRACE && !isInterface
 					&& (mods.flags & Flags.StandardFlags & ~Flags.STATIC) == 0
 					&& mods.annotations.isEmpty()) {
-				/**
+				/*
 				 * 静态代码块
 				 */
 				return List.<JCTree> of(block(pos, mods.flags));
@@ -2753,7 +2760,7 @@ public class Parser {
 						&& type.getTag() == JCTree.IDENT) {
 					if (isInterface || name != className)
 						log.error(pos, "invalid.meth.decl.ret.type.req");
-					/**
+					/*
 					 * 方法
 					 */
 					return List.of(methodDeclaratorRest(pos, mods, null,
@@ -2762,13 +2769,13 @@ public class Parser {
 					pos = S.pos();
 					name = ident();
 					if (S.token() == LPAREN) {
-						/**
+						/*
 						 * 方法
 						 */
 						return List.of(methodDeclaratorRest(pos, mods, type,
 								name, typarams, isInterface, isVoid, dc));
 					} else if (!isVoid && typarams.isEmpty()) {
-						/**
+						/*
 						 * 变量
 						 */
 						List<JCTree> defs = variableDeclaratorsRest(pos, mods,
@@ -2808,6 +2815,9 @@ public class Parser {
 		if (!isVoid)
 			type = bracketsOpt(type);
 		List<JCExpression> thrown = List.nil();
+		/*
+		* 解析异常列表
+		* */
 		if (S.token() == THROWS) {
 			S.nextToken();
 			thrown = qualidentList();
@@ -2818,6 +2828,9 @@ public class Parser {
 			body = block();
 			defaultValue = null;
 		} else {
+			/*
+			* jdk1.8 后加入的DEFAULT
+			* */
 			if (S.token() == DEFAULT) {
 				accept(DEFAULT);
 				defaultValue = annotationValue();

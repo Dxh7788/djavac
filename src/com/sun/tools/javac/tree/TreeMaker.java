@@ -138,12 +138,14 @@ public class TreeMaker implements JCTree.Factory {
         return tree;
     }
 
+    //导包定义
     public JCImport Import(JCTree qualid, boolean importStatic) {
         JCImport tree = new JCImport(qualid, importStatic);
         tree.pos = pos;
         return tree;
     }
 
+    //类定义 Class Definition
     public JCClassDecl ClassDef(JCModifiers mods,
                                 Name name,
                                 List<JCTypeParameter> typarams,
@@ -162,6 +164,7 @@ public class TreeMaker implements JCTree.Factory {
         return tree;
     }
 
+    //方法定义, Method Definition
     public JCMethodDecl MethodDef(JCModifiers mods,
                                Name name,
                                JCExpression restype,
@@ -184,6 +187,7 @@ public class TreeMaker implements JCTree.Factory {
         return tree;
     }
 
+    //变量定义 variable definition
     public JCVariableDecl VarDef(JCModifiers mods, Name name, JCExpression vartype, JCExpression init) {
         JCVariableDecl tree = new JCVariableDecl(mods, name, vartype, init, null);
         tree.pos = pos;
@@ -327,6 +331,7 @@ public class TreeMaker implements JCTree.Factory {
         return tree;
     }
 
+    //创建类,new Class
     public JCNewClass NewClass(JCExpression encl,
                              List<JCExpression> typeargs,
                              JCExpression clazz,
@@ -337,7 +342,7 @@ public class TreeMaker implements JCTree.Factory {
         tree.pos = pos;
         return tree;
     }
-
+    //创建数组,new Array
     public JCNewArray NewArray(JCExpression elemtype,
                              List<JCExpression> dims,
                              List<JCExpression> elems)
@@ -353,6 +358,7 @@ public class TreeMaker implements JCTree.Factory {
         return tree;
     }
 
+    //绑定表示,也就是赋值表达式 term0 +/-/%/* term1
     public JCAssign Assign(JCExpression lhs, JCExpression rhs) {
         JCAssign tree = new JCAssign(lhs, rhs);
         tree.pos = pos;
@@ -376,7 +382,7 @@ public class TreeMaker implements JCTree.Factory {
         tree.pos = pos;
         return tree;
     }
-
+    //Type强转
     public JCTypeCast TypeCast(JCTree clazz, JCExpression expr) {
         JCTypeCast tree = new JCTypeCast(clazz, expr);
         tree.pos = pos;
