@@ -46,25 +46,25 @@ import static com.sun.tools.javac.code.Kinds.*;
 import static com.sun.tools.javac.code.TypeTags.*;
 
 /** 
- * ´ËÀà½«ËùÓĞÀàÖĞ³öÏÖµÄ·ûºÅÊäÈëµ½·ûºÅ±íÖĞ¡£¶øÕâ¸ö¹ı³ÌÊÇÓÉÒÔÏÂÁ½¸ö½×¶Î×é³ÉµÄ:
+ * ï¿½ï¿½ï¿½à½«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ³ï¿½ï¿½ÖµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ëµ½ï¿½ï¿½ï¿½Å±ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¶ï¿½ï¿½ï¿½Éµï¿½:
  * This class enters symbols for all encountered definitions into
  *  the symbol table. The pass consists of two phases, organized as
  *  follows:
  *
- *	µÚÒ»½×¶Î£¬ËùÓĞÀà·ûºÅÖĞ³öÏÖÔÚ·ûºÅÊäÈëµ½×Ô¼ºµÄ·ûºÅ±íÖĞ£¬²¢µİ¹éÆäËüÀàµÄ·ûºÅ,
- *   Àà·ûºÅÊÇÓÉMemberEnter¶ÔÏóÀ´´¦ÀíµÄ¡£
+ *	ï¿½ï¿½Ò»ï¿½×¶Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ³ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ëµ½ï¿½Ô¼ï¿½ï¿½Ä·ï¿½ï¿½Å±ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½İ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½,
+ *   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½MemberEnterï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½
  *  <p>In the first phase, all class symbols are intered into their
  *  enclosing scope, descending recursively down the tree for classes
  *  which are members of other classes. The class symbols are given a
  *  MemberEnter object as completer.
  *  
  *  
- *  µÚ¶ş½×¶Î£¬µ÷ÓÃMemberEnter.complete()·½·¨£¬
+ *  ï¿½Ú¶ï¿½ï¿½×¶Î£ï¿½ï¿½ï¿½ï¿½ï¿½MemberEnter.complete()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  *  
- *  Enter.uncompleted°üÀ¨ËùÓĞÀà·ûºÅ¡¢ÀàµÄ²ÎÊıÀàĞÍ·ûºÅÒ²¾ÍÊÇ·ºĞÍ¡¢¸¸Àà·ûºÅ¡¢½Ó¿ÚÀàĞÍ·û
+ *  Enter.uncompletedï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¡ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Í¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¡ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½Í·ï¿½
  *  
- *  MemberEnter.halfcompleted»ùÓÚEnter.uncompletedµÄ¡£½«ÀàµÄ²ÎÊıÀàĞÍ·ûºÅÒ²¾ÍÊÇ·ºĞÍ¡¢¸¸Àà·ûºÅ¡¢½Ó¿ÚÀàĞÍ·û
- *  ´æ´¢µ½Ò»¸öÎ´´¦ÀíÁĞ±í(Enter.uncompleted)ÖĞ,²¢½«Õâ¸öÎ´´¦ÀíÁĞ±íÖĞµÄËùÓĞ·ûºÅ¶¼½âÎöµ½¸÷×ÔµÄÀà·ûºÅ±íÖĞ£¬¶øÀà·ûºÅÔòÊÇÔÚµÚÒ»½×¶Î½øĞĞÊäÈëµÄ¡£
+ *  MemberEnter.halfcompletedï¿½ï¿½ï¿½ï¿½Enter.uncompletedï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Í¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¡ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½Í·ï¿½
+ *  ï¿½æ´¢ï¿½ï¿½Ò»ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½(Enter.uncompleted)ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½Ğ·ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½×¶Î½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½
  *  
  *  <p>In the second phase classes are completed using
  *  MemberEnter.complete().  Completion might occur on demand, but
@@ -301,7 +301,7 @@ public class Enter extends JCTree.Visitor {
             tree.packge = syms.unnamedPackage;
         }
         /**
-         * ÕÒµ½°üÏÂËùÓĞµÄÀà
+         * ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½
          */
         tree.packge.complete(); // Find all classes in package.
         Env<AttrContext> env = topLevelEnv(tree);
@@ -338,6 +338,7 @@ public class Enter extends JCTree.Visitor {
             tree.packge.package_info = c;
         }
         classEnter(tree.defs, env);
+        //è®¾ç½®TODO
         if (addEnv) {
             todo.append(env);
         }
@@ -346,7 +347,7 @@ public class Enter extends JCTree.Visitor {
     }
 
     /**
-     * ·ÃÎÊÀàÉùÃ÷
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     public void visitClassDef(JCClassDecl tree) {
         Symbol owner = env.info.scope.owner;
@@ -427,17 +428,19 @@ public class Enter extends JCTree.Visitor {
 
         // Add non-local class to uncompleted, to make sure it will be
         // completed later.
-        // ½«Àà·ûºÅ·ÅÈëuncompletedÁĞ±í
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½uncompletedï¿½Ğ±ï¿½
         if (!c.isLocal() && uncompleted != null) uncompleted.append(c);
 //      System.err.println("entering " + c.fullname + " in " + c.owner);//DEBUG
 
         // Recursively enter all member classes.
+        // é€’å½’è¿›å…¥æ‰€æœ‰çš„æˆå‘˜ç±»
         classEnter(tree.defs, localEnv);
 
         result = c.type;
     }
     //where
         /** Does class have the same name as the file it appears in?
+         * ç±»åç§°å’Œæ–‡ä»¶åæ˜¯å¦ä¸€è‡´
          */
         private static boolean classNameMatchesFileName(ClassSymbol c,
                                                         Env<AttrContext> env) {
@@ -479,7 +482,7 @@ public class Enter extends JCTree.Visitor {
     }
 
     /**
-     * ½âÎö¶¥¼¶Óï·¨³éÏóÊ÷µ½uncompletedÁĞ±í
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï·¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uncompletedï¿½Ğ±ï¿½
      * Main method: enter one class from a list of toplevel trees and
      *  place the rest on uncompleted for later processing.
      *  @param trees      The list of trees to be processed.
@@ -501,15 +504,15 @@ public class Enter extends JCTree.Visitor {
                     if (c == null || c == clazz || prevUncompleted == null)
                         clazz.complete();
                     else
-                        //½«Àà·ûºÅ·ÅÈëprevUncompletedÁĞ±í(uncompletedÁĞ±í)
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½prevUncompletedï¿½Ğ±ï¿½(uncompletedï¿½Ğ±ï¿½)
                         prevUncompleted.append(clazz);
                 }
 
                 // if there remain any unimported toplevels (these must have
                 // no classes at all), process their import statements as well.
                 /**
-                 * uncompletedÁĞ±íÃ»ÓĞµÄ·ûºÅ(³ıÀà·ûºÅÍâ)£¬¸ù¾İimprotÉùÃ÷£¬¸øÃ¿Ò»¸öÀàµÄ·ûºÅ¶¼Ìí¼ÓÁËÒ»¸öMemberEnter¶ÔÏó
-                 * ²¢½«ÕâĞ©·ûºÅ(°üÀ¨ÀàµÄ²ÎÊıÀàĞÍ·ûºÅÒ²¾ÍÊÇ·ºĞÍ¡¢¸¸Àà·ûºÅ¡¢½Ó¿ÚÀàĞÍ·ûµÈ)·ÅÈëuncompletedÁĞ±í
+                 * uncompletedï¿½Ğ±ï¿½Ã»ï¿½ĞµÄ·ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½improtï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿Ò»ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½MemberEnterï¿½ï¿½ï¿½ï¿½
+                 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ©ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Í¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¡ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½uncompletedï¿½Ğ±ï¿½
                  */
                 for (JCCompilationUnit tree : trees) {
                     if (tree.starImportScope.elems == null) {
@@ -523,7 +526,7 @@ public class Enter extends JCTree.Visitor {
                 }
             }
         } finally {
-        	//prevUncompletedÁĞ±í¸³Öµ¸øuncompletedÁĞ±í
+        	//prevUncompletedï¿½Ğ±ï¿½Öµï¿½ï¿½uncompletedï¿½Ğ±ï¿½
             uncompleted = prevUncompleted;
             annotate.enterDone();
         }
