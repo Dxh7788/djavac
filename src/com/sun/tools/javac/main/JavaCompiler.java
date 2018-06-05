@@ -802,23 +802,17 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
         	 */
             initProcessAnnotations(processors);
 
-            /**
-             * �ʷ��������﷨����
-             * parseFiles(sourceFileObjects) ����Դ�롣��ȡ�﷨��JCCompilationUnit ����
-             * 
-             * �����ű�
-             * enterTrees() �����﷨���Ķ��ֽڵ㶼�ȱ��ŵ��������б��в���������б��еĽڵ㡣
-             * ���е�����ű����뵽��Χ������ķ��ű���ȷ����Ĳ������Է������Ͷ��ԣ��������ͺͽӿ�
-             * �����Ҫ���Ĭ�Ϲ������������г��ֵķ������뵽������ķ��ű��С�
-             */
+            /*
+            * 一个文件是一个编译单元,
+            * parseFiles(sourceFileObjects) 编译Java文件生成JCCompilationUnit编译单元集
+            */
             // These method calls must be chained to avoid memory leaks
             delegateCompiler =
                 processAnnotations(
                     enterTrees(stopIfError(CompileState.PARSE, parseFiles(sourceFileObjects))),
                     classnames);
-            
-            /**
-             * �������
+            /*
+             *  根据抽象语法树生成class文件
              */
             delegateCompiler.compile2();
             delegateCompiler.close();
