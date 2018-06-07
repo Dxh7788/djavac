@@ -46,26 +46,24 @@ import static com.sun.tools.javac.code.Kinds.*;
 import static com.sun.tools.javac.code.TypeTags.*;
 
 /** 
- * ���ཫ�������г��ֵķ������뵽���ű��С�����������������������׶���ɵ�:
  * This class enters symbols for all encountered definitions into
  *  the symbol table. The pass consists of two phases, organized as
  *  follows:
  *
- *	��һ�׶Σ�����������г����ڷ������뵽�Լ��ķ��ű��У����ݹ�������ķ���,
- *   ���������MemberEnter����������ġ�
+ *	第一个阶段,所有类符号进入它们封装的范围,针对抽象树的为别的类的成员的类向下递归,最后使用MemberEnter对象作为一个完成器.completer
  *  <p>In the first phase, all class symbols are intered into their
  *  enclosing scope, descending recursively down the tree for classes
  *  which are members of other classes. The class symbols are given a
  *  MemberEnter object as completer.
  *  
  *  
- *  �ڶ��׶Σ�����MemberEnter.complete()������
- *  
- *  Enter.uncompleted������������š���Ĳ������ͷ���Ҳ���Ƿ��͡�������š��ӿ����ͷ�
- *  
- *  MemberEnter.halfcompleted����Enter.uncompleted�ġ�����Ĳ������ͷ���Ҳ���Ƿ��͡�������š��ӿ����ͷ�
- *  �洢��һ��δ�����б�(Enter.uncompleted)��,�������δ�����б��е����з��Ŷ����������Ե�����ű��У�������������ڵ�һ�׶ν�������ġ�
- *  
+ *  在第二个阶段,使用MemberEnter.complete()来完成。完成可能来自于命令,但是任何威望城的类都将会彻底通过'uncompleted'队列来完成。
+ *  Enter.uncompleted
+ *  主要完成两个任务
+ *  (1)处理类参数,超类和接口
+ *  (2)把所有定义在类中的符号包含在范围中.以及在阶段一种处理的异常.
+ *  (2)要依赖于(1)所以会放在halfcompleted队列中.
+ *
  *  <p>In the second phase classes are completed using
  *  MemberEnter.complete().  Completion might occur on demand, but
  *  any classes that are not completed that way will be eventually
@@ -282,6 +280,9 @@ public class Enter extends JCTree.Visitor {
         return ts.toList();
     }
 
+    /*
+    * 访问最外层类,顶层类
+    * */
     public void visitTopLevel(JCCompilationUnit tree) {
         JavaFileObject prev = log.useSource(tree.sourcefile);
         boolean addEnv = false;
@@ -300,13 +301,14 @@ public class Enter extends JCTree.Visitor {
         } else {
             tree.packge = syms.unnamedPackage;
         }
-        /**
-         * �ҵ��������е���
+        /*
+         * 判断导包中的类是否已定义
          */
         tree.packge.complete(); // Find all classes in package.
         Env<AttrContext> env = topLevelEnv(tree);
 
         // Save environment of package-info.java file.
+        // 保存package-info.java中的环境信息
         if (isPkgInfo) {
             Env<AttrContext> env0 = typeEnvs.get(tree.packge);
             if (env0 == null) {
@@ -347,7 +349,7 @@ public class Enter extends JCTree.Visitor {
     }
 
     /**
-     * ����������
+     * 访问类定义
      */
     public void visitClassDef(JCClassDecl tree) {
         Symbol owner = env.info.scope.owner;
@@ -494,7 +496,7 @@ public class Enter extends JCTree.Visitor {
         if (memberEnter.completionEnabled) uncompleted = new ListBuffer<ClassSymbol>();
 
         try {
-            // enter all classes, and construct uncompleted list
+            // enter all classes, and construct uncompleted list,进入所有的类,并且构建未完成的列表部分
             classEnter(trees, null);
 
             // complete all uncompleted classes in memberEnter
