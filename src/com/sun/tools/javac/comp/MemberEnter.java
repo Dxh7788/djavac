@@ -802,7 +802,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
  *********************************************************************/
 
     /** Complete entering a class.
-     *  ½«Î´´¦ÀíÁĞ±íÖĞµÄËùÓĞ·ûºÅ¶¼½âÎöµ½¸÷×ÔµÄÀà·ûºÅ±íÖĞ
+     *  ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½Ğ·ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½
      *  @param sym         The symbol of the class to be completed.
      */
     public void complete(Symbol sym) throws CompletionFailure {
@@ -907,7 +907,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
             chk.checkNonCyclic(tree.pos(), c.type);
 
             /**
-             * Ôö¼ÓÒ»¸öÄ¬ÈÏµÄ¹¹Ôì·½·¨(µ±ÀàÃ»ÓĞ¹¹Ôì·½·¨Ê±)
+             * ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä¬ï¿½ÏµÄ¹ï¿½ï¿½ì·½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ¹ï¿½ï¿½ì·½ï¿½ï¿½Ê±)
              */
             if ((c.flags() & INTERFACE) == 0 &&
                 !TreeInfo.hasConstructors(tree.defs)) {
@@ -916,6 +916,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
                 List<Type> thrown = List.nil();
                 long ctorFlags = 0;
                 boolean based = false;
+                //åŒ¿åç±» anonymous class
                 if (c.name.len == 0) {
                     JCNewClass nc = (JCNewClass)env.next.tree;
                     if (nc.constructor != null) {
@@ -931,6 +932,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
                         thrown = superConstrType.getThrownTypes();
                     }
                 }
+                //æŒ‚åœ¨é»˜è®¤æ„é€ å‡½æ•°
                 JCTree constrDef = DefaultConstructor(make.at(tree.pos), c,
                                                     typarams, argtypes, thrown,
                                                     ctorFlags, based);

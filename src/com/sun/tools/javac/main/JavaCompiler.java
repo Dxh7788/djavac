@@ -353,6 +353,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
 
         Options options = Options.instance(context);
 
+        //是否输出虚拟机运行信息
         verbose       = options.get("-verbose")       != null;
         sourceOutput  = options.get("-printsource")   != null; // used to be -s
         stubOutput    = options.get("-stubs")         != null;
@@ -581,9 +582,6 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             Scanner scanner = getScannerFactory().newScanner(content);
             //Parser是文件内容分析器.创建时参数为是否保留注解,默认值为false
             Parser parser = parserFactory.newParser(scanner, keepComments(), genEndPos);
-            /**
-             * �ʷ��������﷨��������ȡ�﷨��
-             */
             //生成抽象语法树
             tree = parser.compilationUnit();
             log.unrecoverableError |= (log.nerrors > initialErrorCount);
@@ -807,10 +805,11 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             * parseFiles(sourceFileObjects) 编译Java文件生成JCCompilationUnit编译单元集
             */
             // These method calls must be chained to avoid memory leaks
-            delegateCompiler =
-                processAnnotations(
-                    enterTrees(stopIfError(CompileState.PARSE, parseFiles(sourceFileObjects))),
-                    classnames);
+            //分步解析,parseFiles(sourceFileObjects)只分析原始Java文件内容,不包含构造器
+            List<JCCompilationUnit> roots = parseFiles(sourceFileObjects);
+            roots = stopIfError(CompileState.PARSE, roots);
+            roots = enterTrees(roots);
+            delegateCompiler = processAnnotations(roots,classnames);
             /*
              *  根据抽象语法树生成class文件
              */
@@ -910,7 +909,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
         }
         
         /**
-         * �����ű�
+         * 完成语法分析,加入默认构造函数,匿名类的抽象树
          */
         enter.main(roots);
 
@@ -1116,7 +1115,6 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
     }
 
     /**
-     * 属性赋值和属性检查
      * Attribute a parse tree.
      * @returns the attributed parse tree
      */
@@ -1251,7 +1249,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
          * are processed through attribute and flow before subtypes are translated.
          */
         /*
-        * 类型擦除
+        *
         * */
         class ScanNested extends TreeScanner {
             Set<Env<AttrContext>> dependencies = new LinkedHashSet<Env<AttrContext>>();
@@ -1329,7 +1327,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             //泛型转换
             env.tree = transTypes.translateTopLevelClass(env.tree, localMake);
 
-            //检查内部类转换错误
+            //
             if (shouldStop(CompileState.LOWER))
                 return;
 

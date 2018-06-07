@@ -288,6 +288,7 @@ public class Enter extends JCTree.Visitor {
         boolean addEnv = false;
         boolean isPkgInfo = tree.sourcefile.isNameCompatible("package-info",
                                                              JavaFileObject.Kind.SOURCE);
+        //pid是package名称或者其他,唯一性标识
         if (tree.pid != null) {
             tree.packge = reader.enterPackage(TreeInfo.fullName(tree.pid));
             if (tree.packageAnnotations.nonEmpty()) {
@@ -305,6 +306,7 @@ public class Enter extends JCTree.Visitor {
          * 判断导包中的类是否已定义
          */
         tree.packge.complete(); // Find all classes in package.
+        //定义顶层env
         Env<AttrContext> env = topLevelEnv(tree);
 
         // Save environment of package-info.java file.
@@ -339,6 +341,7 @@ public class Enter extends JCTree.Visitor {
             c.members_field = new Scope(c);
             tree.packge.package_info = c;
         }
+        //进入class body
         classEnter(tree.defs, env);
         //设置TODO
         if (addEnv) {
