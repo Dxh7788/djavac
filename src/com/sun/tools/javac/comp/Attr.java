@@ -2627,11 +2627,11 @@ public class Attr extends JCTree.Visitor {
 
         Type st = types.supertype(c.type);
         if ((c.flags_field & Flags.COMPOUND) == 0) {
-            // First, attribute superclass.
+            // First, attribute superclass.首先,父类属性
             if (st.tag == CLASS)
                 attribClass((ClassSymbol)st.tsym);
 
-            // Next attribute owner, if it is a class.
+            // Next attribute owner, if it is a class.其次,如果它是个类,则自身属性.
             if (c.owner.kind == TYP && c.owner.type.tag == CLASS)
                 attribClass((ClassSymbol)c.owner);
         }
@@ -2661,7 +2661,7 @@ public class Attr extends JCTree.Visitor {
             JavaFileObject prev = log.useSource(c.sourcefile);
 
             try {
-                // java.lang.Enum may not be subclassed by a non-enum
+                // java.lang.Enum may not be subclassed by a non-enum 枚举类不能有子类,不能有父类
                 if (st.tsym == syms.enumSym &&
                     ((c.flags_field & (Flags.ENUM|Flags.COMPOUND)) == 0))
                     log.error(env.tree.pos(), "enum.no.subclassing");
@@ -2673,8 +2673,9 @@ public class Attr extends JCTree.Visitor {
                     !target.compilerBootstrap(c)) {
                     log.error(env.tree.pos(), "enum.types.not.extensible");
                 }
+                //class类体的属性
                 attribClassBody(env, c);
-
+                //检查过时的注解
                 chk.checkDeprecatedAnnotation(env.tree.pos(), c);
             } finally {
                 log.useSource(prev);
@@ -2693,10 +2694,10 @@ public class Attr extends JCTree.Visitor {
         JCClassDecl tree = (JCClassDecl)env.tree;
         assert c == tree.sym;
 
-        // Validate annotations
+        // Validate annotations,验证注解
         chk.validateAnnotations(tree.mods.annotations, c);
 
-        // Validate type parameters, supertype and interfaces.
+        // Validate type parameters, supertype and interfaces.验证类型参数,父类型和接口
         attribBounds(tree.typarams);
         chk.validateTypeParams(tree.typarams);
         chk.validate(tree.extending);
@@ -2704,6 +2705,7 @@ public class Attr extends JCTree.Visitor {
 
         // If this is a non-abstract class, check that it has no abstract
         // methods or unimplemented methods of an implemented interface.
+        // 如果不是非抽象类,检查它没有抽象方法或者没有实现接口的实现的方法
         if ((c.flags() & (ABSTRACT | INTERFACE)) == 0) {
             if (!relax)
                 chk.checkAllDefined(tree.pos(), c);
@@ -2720,11 +2722,13 @@ public class Attr extends JCTree.Visitor {
             // Check that all extended classes and interfaces
             // are compatible (i.e. no two define methods with same arguments
             // yet different return types).  (JLS 8.4.6.3)
+            // 所有的继承类和接口没有同名方法/参数/和返回值
             chk.checkCompatibleSupertypes(tree.pos(), c.type);
         }
 
         // Check that class does not import the same parameterized interface
         // with two different argument lists.
+        // 没有导入相同泛型使用相同参数列表
         chk.checkClassBounds(tree.pos(), c.type);
 
         tree.type = c.type;
@@ -2738,6 +2742,7 @@ public class Attr extends JCTree.Visitor {
         }
 
         // Check that a generic class doesn't extend Throwable
+        // 泛型类不能继承Throwable
         if (!c.type.allparams().isEmpty() && types.isSubtype(c.type, syms.throwableType))
             log.error(tree.extending.pos(), "generic.throwable");
 
@@ -2746,10 +2751,10 @@ public class Attr extends JCTree.Visitor {
         chk.checkImplementations(tree);
 
         for (List<JCTree> l = tree.defs; l.nonEmpty(); l = l.tail) {
-            // Attribute declaration
+            // Attribute declaration 加入声明属性
             attribStat(l.head, env);
             // Check that declarations in inner classes are not static (JLS 8.1.2)
-            // Make an exception for static constants.
+            // Make an exception for static constants. 内部类不能使用static,静态常量产生一个异常
             if (c.owner.kind != PCK &&
                 ((c.flags() & STATIC) == 0 || c.name == names.empty) &&
                 (TreeInfo.flags(l.head) & (STATIC | INTERFACE)) != 0) {
@@ -2762,13 +2767,13 @@ public class Attr extends JCTree.Visitor {
             }
         }
 
-        // Check for cycles among non-initial constructors.
+        // Check for cycles among non-initial constructors. 检查无初始化构造器
         chk.checkCyclicConstructors(tree);
 
-        // Check for cycles among annotation elements.
+        // Check for cycles among annotation elements. 检查无值注解
         chk.checkNonCyclicElements(tree);
 
-        // Check for proper use of serialVersionUID
+        // Check for proper use of serialVersionUID 检查是否正确使用序列化id
         if (env.info.lint.isEnabled(Lint.LintCategory.SERIAL) &&
             isSerializable(c) &&
             (c.flags() & Flags.ENUM) == 0 &&

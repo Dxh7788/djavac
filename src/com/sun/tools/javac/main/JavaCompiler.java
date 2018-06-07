@@ -1116,6 +1116,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
     }
 
     /**
+     * 属性赋值和属性检查
      * Attribute a parse tree.
      * @returns the attributed parse tree
      */
@@ -1232,6 +1233,9 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
      * the current implicitSourcePolicy is taken into account.
      * The preparation stops as soon as an error is found.
      */
+    /*
+    * FLOW的下一个状态是TRANSTYPES,所以要检验TRANSTYPES状态是否正确
+    * */
     protected void desugar(final Env<AttrContext> env, Queue<Pair<Env<AttrContext>, JCClassDecl>> results) {
         if (shouldStop(CompileState.TRANSTYPES))
             return;
@@ -1246,6 +1250,9 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
          * including information in supertypes, we need to ensure that supertypes
          * are processed through attribute and flow before subtypes are translated.
          */
+        /*
+        * 类型擦除
+        * */
         class ScanNested extends TreeScanner {
             Set<Env<AttrContext>> dependencies = new LinkedHashSet<Env<AttrContext>>();
             @Override
@@ -1312,12 +1319,17 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
                 }
                 return;
             }
-
+            /*
+            * 解析语法糖,比如泛型、内部类
+            * */
+            //检查泛型错误
             if (shouldStop(CompileState.TRANSTYPES))
                 return;
 
+            //泛型转换
             env.tree = transTypes.translateTopLevelClass(env.tree, localMake);
 
+            //检查内部类转换错误
             if (shouldStop(CompileState.LOWER))
                 return;
 
@@ -1333,6 +1345,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             }
 
             //translate out inner classes
+            //转换所有内部类
             List<JCTree> cdefs = lower.translateTopLevelClass(env, env.tree, localMake);
 
             if (shouldStop(CompileState.LOWER))
