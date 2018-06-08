@@ -808,10 +808,11 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             //分步解析,parseFiles(sourceFileObjects)只分析原始Java文件内容,不包含构造器
             List<JCCompilationUnit> roots = parseFiles(sourceFileObjects);
             roots = stopIfError(CompileState.PARSE, roots);
+            //初始化默认构造函数
             roots = enterTrees(roots);
             delegateCompiler = processAnnotations(roots,classnames);
             /*
-             *  根据抽象语法树生成class文件
+             * 根据抽象语法树生成class文件
              */
             delegateCompiler.compile2();
             delegateCompiler.close();

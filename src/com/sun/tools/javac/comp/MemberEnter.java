@@ -392,6 +392,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
 
     /** Enter field and method definitions and process import
      *  clauses, catching any completion failure exceptions.
+     *  进入属性和方法定义并且执行import子句,捕获任意完成失败异常
      */
     protected void memberEnter(JCTree tree, Env<AttrContext> env) {
         Env<AttrContext> prevEnv = this.env;
@@ -514,17 +515,18 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
             }
         }
 
-        // process package annotations
+        // process package annotations 处理包的注解
         annotateLater(tree.packageAnnotations, env, tree.packge);
 
-        // Import-on-demand java.lang.
+        // Import-on-demand java.lang. 导入java.lang.所有文件
         importAll(tree.pos, reader.enterPackage(names.java_lang), env);
 
-        // Process all import clauses.
+        // Process all import clauses.处理所有import子句
         memberEnter(tree.defs, env);
     }
 
     // process the non-static imports and the static imports of types.
+    // 处理非静态导入和静态导入类型
     public void visitImport(JCImport tree) {
         JCTree imp = tree.qualid;
         Name name = TreeInfo.name(imp);
@@ -532,6 +534,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
 
         // Create a local environment pointing to this tree to disable
         // effects of other imports in Resolve.findGlobalType
+        // 防止重复导入
         Env<AttrContext> localEnv = env.dup(tree);
 
         // Attribute qualifying package or class.
@@ -568,7 +571,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
         tree.sym = m;
         Env<AttrContext> localEnv = methodEnv(tree, env);
 
-        // Compute the method type
+        // Compute the method type.计算方法类型,方法签名
         m.type = signature(tree.typarams, tree.params,
                            tree.restype, tree.thrown,
                            localEnv);
@@ -583,11 +586,12 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
         }
         m.params = params.toList();
 
-        // mark the method varargs, if necessary
+        // mark the method varargs, if necessary 边长参数
         if (lastParam != null && (lastParam.mods.flags & Flags.VARARGS) != 0)
             m.flags_field |= Flags.VARARGS;
 
         localEnv.info.scope.leave();
+        //唯一性验证
         if (chk.checkUnique(tree.pos(), m, enclScope)) {
             enclScope.enter(m);
         }
@@ -842,7 +846,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
             // create an environment for evaluating the base clauses
             Env<AttrContext> baseEnv = baseEnv(tree, env);
 
-            // Determine supertype.
+            // Determine supertype.找到父类
             Type supertype =
                 (tree.extending != null)
                 ? attr.attribBase(tree.extending, baseEnv, true, false, true)

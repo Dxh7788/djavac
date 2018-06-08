@@ -407,6 +407,7 @@ public class Enter extends JCTree.Visitor {
         typeEnvs.put(c, localEnv);
 
         // Fill out class fields.
+        // 设置completer为MemberEnter,使用MemberEnter来完成类的其他部分生成
         c.completer = memberEnter;
         c.flags_field = chk.checkFlags(tree.pos(), tree.mods.flags, c, tree);
         c.sourcefile = env.toplevel.sourcefile;
@@ -502,7 +503,7 @@ public class Enter extends JCTree.Visitor {
             // enter all classes, and construct uncompleted list,进入所有的类,并且构建未完成的列表部分
             classEnter(trees, null);
 
-            // complete all uncompleted classes in memberEnter
+            // complete all uncompleted classes in memberEnter 在MemberEnter中完成所有未完成类
             if  (memberEnter.completionEnabled) {
                 while (uncompleted.nonEmpty()) {
                     ClassSymbol clazz = uncompleted.next();
