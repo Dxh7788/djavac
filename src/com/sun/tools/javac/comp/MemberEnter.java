@@ -254,7 +254,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
         final PackageSymbol packge = env.toplevel.packge;
         final TypeSymbol origin = tsym;
 
-        // enter imported types immediately
+        // enter imported types immediately 立即进入导入类型
         new Object() {
             Set<Symbol> processed = new HashSet<Symbol>();
             void importFrom(TypeSymbol tsym) {

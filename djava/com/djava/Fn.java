@@ -18,5 +18,11 @@ public class Fn {
 
     }
     public static void main(String[] args) {
+        new Fn(){
+            public void k(){
+                System.out.println("m");
+            }
+        }.k();
     }
+
 }
