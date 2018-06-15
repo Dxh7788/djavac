@@ -1449,6 +1449,7 @@ public class ClassWriter extends ClassFile {
     public JavaFileObject writeClass(ClassSymbol c)
         throws IOException, PoolOverflow, StringOverflow
     {
+        //生成空的class文件
         JavaFileObject outFile
             = fileManager.getJavaFileForOutput(CLASS_OUTPUT,
                                                c.flatname.toString(),
@@ -1456,6 +1457,7 @@ public class ClassWriter extends ClassFile {
                                                c.sourcefile);
         OutputStream out = outFile.openOutputStream();
         try {
+            //将解析在内存中的值写入class文件中
             writeClassFile(out, c);
             if (verbose)
                 log.errWriter.println(log.getLocalizedString("verbose.wrote.file", outFile));

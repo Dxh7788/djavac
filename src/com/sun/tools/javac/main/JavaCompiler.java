@@ -854,8 +854,13 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
                 break;
 
             case BY_TODO:
-                while (!todo.isEmpty())
-                    generate(desugar(flow(attribute(todo.remove()))));
+                while (!todo.isEmpty()) {
+                    //属性赋值
+                    Env<AttrContext> attrEnv = attribute(todo.remove());
+                    Queue<Env<AttrContext>> atrrEnvQueue = flow(attrEnv);
+                    Queue<Pair<Env<AttrContext>, JCClassDecl>> pairQueue = desugar(atrrEnvQueue);
+                    generate(pairQueue);
+                }
                 break;
 
             default:
