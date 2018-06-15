@@ -65,6 +65,7 @@ public abstract class Attribute implements AnnotationValue {
 
 
     /** The value for an annotation element of primitive type or String. */
+    /* 基本类型或者String类型的值*/
     public static class Constant extends Attribute {
         public final Object value;
         public void accept(Visitor v) { v.visitConstant(this); }
@@ -103,6 +104,9 @@ public abstract class Attribute implements AnnotationValue {
     /** The value for an annotation element of type java.lang.Class,
      *  represented as a ClassSymbol.
      */
+    /*
+    * java.lang.Class类型的值
+    * */
     public static class Class extends Attribute {
         public final Type type;
         public void accept(Visitor v) { v.visitClass(this); }
@@ -110,6 +114,7 @@ public abstract class Attribute implements AnnotationValue {
             super(makeClassType(types, type));
             this.type = type;
         }
+        //types.boxedClass(type).type进行类的包装
         static Type makeClassType(Types types, Type type) {
             Type arg = type.isPrimitive()
                 ? types.boxedClass(type).type
@@ -132,6 +137,7 @@ public abstract class Attribute implements AnnotationValue {
     /** A compound annotation element value, the type of which is an
      *  attribute interface.
      */
+    /*接口元素值*/
     public static class Compound extends Attribute implements AnnotationMirror {
         /** The attributes values, as pairs.  Each pair contains a
          *  reference to the accessing method in the attribute interface
@@ -207,6 +213,7 @@ public abstract class Attribute implements AnnotationValue {
 
     /** The value for an annotation element of an array type.
      */
+    /*数组元素值*/
     public static class Array extends Attribute {
         public final Attribute[] values;
         public Array(Type type, Attribute[] values) {
@@ -237,6 +244,7 @@ public abstract class Attribute implements AnnotationValue {
 
     /** The value for an annotation element of an enum type.
      */
+    /*枚举类型值*/
     public static class Enum extends Attribute {
         public VarSymbol value;
         public Enum(Type type, VarSymbol value) {
