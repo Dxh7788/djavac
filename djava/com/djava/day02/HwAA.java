@@ -18,4 +18,7 @@ public class HwAA extends HwA {
         }
         System.out.println("1");
     }
+    public void p(String a){
+
+    }
 }
