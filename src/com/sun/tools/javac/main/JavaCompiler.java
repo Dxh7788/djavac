@@ -1234,6 +1234,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
      */
     /*
     * FLOW的下一个状态是TRANSTYPES,所以要检验TRANSTYPES状态是否正确
+    * 解析语法糖
     * */
     protected void desugar(final Env<AttrContext> env, Queue<Pair<Env<AttrContext>, JCClassDecl>> results) {
         if (shouldStop(CompileState.TRANSTYPES))
