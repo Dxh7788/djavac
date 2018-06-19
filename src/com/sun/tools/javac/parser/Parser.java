@@ -885,18 +885,18 @@ public class Parser {
 		JCExpression t;
 		List<JCExpression> typeArgs = typeArgumentsOpt(EXPR);
 		switch (S.token()) {
-		case QUES:
+		case QUES://?
 			if ((mode & TYPE) != 0 && (mode & (TYPEARG | NOPARAMS)) == TYPEARG) {
 				mode = TYPE;
 				return typeArgument();
 			} else
 				return illegal();
-		case PLUSPLUS:
-		case SUBSUB:
-		case BANG:
-		case TILDE:
-		case PLUS:
-		case SUB:
+		case PLUSPLUS://++
+		case SUBSUB:// --
+		case BANG:// !
+		case TILDE: // ~
+		case PLUS: //+
+		case SUB: //-
 			if (typeArgs == null && (mode & EXPR) != 0) {
 				Token token = S.token();
 				S.nextToken();
@@ -913,7 +913,7 @@ public class Parser {
 			} else
 				return illegal();
 			break;
-		case LPAREN:
+		case LPAREN://(
 			if (typeArgs == null && (mode & EXPR) != 0) {
 				S.nextToken();
 				mode = EXPR | TYPE | NOPARAMS;
@@ -994,7 +994,7 @@ public class Parser {
 				return illegal();
 			t = toP(F.at(pos).Parens(t));
 			break;
-		case THIS:
+		case THIS://this
 			if ((mode & EXPR) != 0) {
 				mode = EXPR;
 				t = to(F.at(pos).Ident(names._this));
@@ -1007,7 +1007,7 @@ public class Parser {
 			} else
 				return illegal();
 			break;
-		case SUPER:
+		case SUPER://super
 			if ((mode & EXPR) != 0) {
 				mode = EXPR;
 				t = to(superSuffix(typeArgs, F.at(pos).Ident(names._super)));
@@ -1023,14 +1023,14 @@ public class Parser {
 		case STRINGLITERAL:
 		case TRUE:
 		case FALSE:
-		case NULL:
+		case NULL://null
 			if (typeArgs == null && (mode & EXPR) != 0) {
 				mode = EXPR;
 				t = literal(names.empty);
 			} else
 				return illegal();
 			break;
-		case NEW:
+		case NEW://new 表达式
 			if (typeArgs != null)
 				return illegal();
 			if ((mode & EXPR) != 0) {
