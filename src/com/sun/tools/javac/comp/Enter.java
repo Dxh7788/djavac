@@ -434,7 +434,8 @@ public class Enter extends JCTree.Visitor {
 
         // Add non-local class to uncompleted, to make sure it will be
         // completed later.
-        // 未完成队列append新值
+        //添加非本地类进入未完成队列,保证之后被完成.
+        // 未完成队列append新值,是否本地类以及未完成队列是否为空
         if (!c.isLocal() && uncompleted != null) uncompleted.append(c);
 //      System.err.println("entering " + c.fullname + " in " + c.owner);//DEBUG
 

@@ -502,6 +502,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
 
         // check that no class exists with same fully qualified name as
         // toplevel package
+        // 检查不存在相似的全类名
         if (checkClash && tree.pid != null) {
             Symbol p = tree.packge;
             while (p.owner != syms.rootPackage) {
@@ -830,8 +831,8 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
             // Save class environment for later member enter (2) processing.
             halfcompleted.append(env);
 
-            // If this is a toplevel-class, make sure any preceding import
-            // clauses have been seen.
+            // If this is a toplevel-class, make sure any preceding import clauses have been seen.
+            // 完成import导包的工作
             if (c.owner.kind == PCK) {
                 memberEnter(env.toplevel, env.enclosing(JCTree.TOPLEVEL));
                 todo.append(env);
@@ -839,7 +840,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
 
             // Mark class as not yet attributed.
             c.flags_field |= UNATTRIBUTED;
-
+            // type类型完成值
             if (c.owner.kind == TYP)
                 c.owner.complete();
 
@@ -868,7 +869,7 @@ public class MemberEnter extends JCTree.Visitor implements Completer {
                     interfaceTrees.prepend(make.Type(new ClassType(syms.comparableType.getEnclosingType(),
                                                                    List.of(c.type),
                                                                    syms.comparableType.tsym)));
-                // add interface Serializable
+                // add interface Serializable,枚举型默认会加上序列化
                 interfaceTrees =
                     interfaceTrees.prepend(make.Type(syms.serializableType));
             }
