@@ -2688,6 +2688,7 @@ public class Parser {
 				S.nextToken();
 		}
 		ListBuffer<JCTree> defs = new ListBuffer<JCTree>();
+		//找到类体{},Block
 		while (S.token() != RBRACE && S.token() != EOF) {
 			defs.appendList(classOrInterfaceBodyDeclaration(className,
 					isInterface));
@@ -2768,7 +2769,7 @@ public class Parser {
 				} else {
 					pos = S.pos();
 					name = ident();
-					if (S.token() == LPAREN) {
+					if (S.token() == LPAREN) {//变量和方法的区别就是(
 						/*
 						 * 方法
 						 */
