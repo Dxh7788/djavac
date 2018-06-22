@@ -1641,27 +1641,27 @@ public class Parser {
 		while (true) {
 			int pos = S.pos();
 			switch (S.token()) {
-			case RBRACE:
-			case CASE:
-			case DEFAULT:
-			case EOF:
+			case RBRACE://(
+			case CASE://case
+			case DEFAULT://default
+			case EOF://结束符
 				return stats.toList();
-			case LBRACE:
-			case IF:
-			case FOR:
-			case WHILE:
-			case DO:
-			case TRY:
-			case SWITCH:
-			case SYNCHRONIZED:
-			case RETURN:
-			case THROW:
-			case BREAK:
-			case CONTINUE:
-			case SEMI:
-			case ELSE:
-			case FINALLY:
-			case CATCH:
+			case LBRACE://(
+			case IF://if
+			case FOR://for
+			case WHILE://while
+			case DO://do
+			case TRY://try
+			case SWITCH://switch
+			case SYNCHRONIZED://synchronized
+			case RETURN://return
+			case THROW://thrown
+			case BREAK://break
+			case CONTINUE://continue
+			case SEMI://;
+			case ELSE://else
+			case FINALLY://finally
+			case CATCH://catch
 				stats.append(statement());
 				break;
 			case MONKEYS_AT:
