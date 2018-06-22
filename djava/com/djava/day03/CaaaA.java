@@ -8,6 +8,12 @@ package com.djava.day03;
  */
 public class CaaaA {
 
+    public class CaaaAB<T>{
+        public T grt;
+        public void p(T t){
+            System.out.println(t);
+        }
+    }
     public static void main(String[] args){
 
         int a = 5;
@@ -22,5 +28,7 @@ public class CaaaA {
         Enum Ke;
         label: a =6;
         assert true:"xxxx";
+        CaaaAB caaaAB = new CaaaA().new CaaaAB<String>();
+        caaaAB.p("123");
     }
 }

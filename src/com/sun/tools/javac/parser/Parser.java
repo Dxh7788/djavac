@@ -1100,13 +1100,13 @@ public class Parser {
 							t = superSuffix(typeArgs, t);
 							typeArgs = null;
 							break loop;
-						case NEW:
+						case NEW://内部类创建,类似new A().new B();
 							if (typeArgs != null)
 								return illegal();
 							mode = EXPR;
 							int pos1 = S.pos();
 							S.nextToken();
-							if (S.token() == LT)
+							if (S.token() == LT)//泛型new A().new B<T>()
 								typeArgs = typeArguments();
 							t = innerCreator(pos1, typeArgs, t);
 							typeArgs = null;
