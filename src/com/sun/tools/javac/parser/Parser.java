@@ -1730,6 +1730,7 @@ public class Parser {
 				} else {
 					// This Exec is an "ExpressionStatement"; it subsumes the
 					// terminating semicolon
+					// 表达式检查,是否正常
 					stats.append(to(F.at(pos).Exec(checkExprStat(t))));
 					accept(SEMI);
 				}
@@ -1783,7 +1784,7 @@ public class Parser {
 					.<JCStatement> nil() : forInit();
 			if (inits.length() == 1 && inits.head.getTag() == JCTree.VARDEF
 					&& ((JCVariableDecl) inits.head).init == null
-					&& S.token() == COLON) {
+					&& S.token() == COLON) {//foreach
 				checkForeach();
 				JCVariableDecl var = (JCVariableDecl) inits.head;
 				accept(COLON);
@@ -1791,7 +1792,7 @@ public class Parser {
 				accept(RPAREN);
 				JCStatement body = statement();
 				return F.at(pos).ForeachLoop(var, expr, body);
-			} else {
+			} else {//for循环
 				accept(SEMI);
 				JCExpression cond = S.token() == SEMI ? null : expression();
 				accept(SEMI);
