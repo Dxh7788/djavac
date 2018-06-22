@@ -1608,6 +1608,7 @@ public class Parser {
 	 */
 	JCBlock block(int pos, long flags) {
 		accept(LBRACE);
+		//解析代码块中的表达式
 		List<JCStatement> stats = blockStatements();
 		JCBlock t = F.at(pos).Block(flags, stats);
 		while (S.token() == CASE || S.token() == DEFAULT) {
@@ -1664,7 +1665,7 @@ public class Parser {
 				stats.append(statement());
 				break;
 			case MONKEYS_AT:
-			case FINAL: {
+			case FINAL: {//方法内可以声明
 				String dc = S.docComment();
 				JCModifiers mods = modifiersOpt();
 				if (S.token() == INTERFACE || S.token() == CLASS || allowEnums
@@ -1681,6 +1682,7 @@ public class Parser {
 				}
 				break;
 			}
+			//方法中有abstract或者strictfp则为接口、类或者枚举
 			case ABSTRACT:
 			case STRICTFP: {
 				String dc = S.docComment();
@@ -1688,8 +1690,8 @@ public class Parser {
 				stats.append(classOrInterfaceOrEnumDeclaration(mods, dc));
 				break;
 			}
-			case INTERFACE:
-			case CLASS:
+			case INTERFACE://方法内可以声明interface
+			case CLASS://方法内可以声明class
 				stats.append(classOrInterfaceOrEnumDeclaration(modifiersOpt(),
 						S.docComment()));
 				break;
@@ -2826,6 +2828,7 @@ public class Parser {
 		JCBlock body = null;
 		JCExpression defaultValue;
 		if (S.token() == LBRACE) {
+			//解析方法块
 			body = block();
 			defaultValue = null;
 		} else {
