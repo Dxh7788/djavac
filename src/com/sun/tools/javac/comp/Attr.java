@@ -2622,7 +2622,7 @@ public class Attr extends JCTree.Visitor {
         if (c.type.tag == ERROR) return;
 
         // Check for cycles in the inheritance graph, which can arise from
-        // ill-formed class files.
+        // ill-formed class files. 没有循环继承关系
         chk.checkNonCyclic(null, c.type);
 
         Type st = types.supertype(c.type);
