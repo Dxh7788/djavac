@@ -1744,7 +1744,7 @@ public class Parser {
 
 			// ensure no dangling /** @deprecated */ active
 			S.resetDeprecatedFlag();
-		}
+ 		}
 	}
 
 	/**

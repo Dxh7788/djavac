@@ -17,10 +17,9 @@ public class CaaaA {
         abstract class ACaaaA{
 
         }
-        class kc{
-
+        class Kc {
         }
-        Enum ke;
+        Enum Ke;
         assert true:"xxxx";
     }
 }
