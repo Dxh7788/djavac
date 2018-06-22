@@ -10,7 +10,7 @@ public class CaaaA {
 
     public static void main(String[] args){
 
-        final int a = 5;
+        int a = 5;
         final class FCaaaA{
 
         }
@@ -20,6 +20,7 @@ public class CaaaA {
         class Kc {
         }
         Enum Ke;
+        label: a =6;
         assert true:"xxxx";
     }
 }

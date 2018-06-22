@@ -1710,6 +1710,7 @@ public class Parser {
 			default:
 				Name name = S.name();
 				JCExpression t = term(EXPR | TYPE);
+				//label标签
 				if (S.token() == COLON && t.getTag() == JCTree.IDENT) {
 					S.nextToken();
 					JCStatement stat = statement();
@@ -2961,24 +2962,24 @@ public class Parser {
 	 */
 	protected JCExpression checkExprStat(JCExpression t) {
 		switch (t.getTag()) {
-		case JCTree.PREINC:
-		case JCTree.PREDEC:
-		case JCTree.POSTINC:
-		case JCTree.POSTDEC:
-		case JCTree.ASSIGN:
-		case JCTree.BITOR_ASG:
-		case JCTree.BITXOR_ASG:
-		case JCTree.BITAND_ASG:
-		case JCTree.SL_ASG:
-		case JCTree.SR_ASG:
-		case JCTree.USR_ASG:
-		case JCTree.PLUS_ASG:
-		case JCTree.MINUS_ASG:
-		case JCTree.MUL_ASG:
-		case JCTree.DIV_ASG:
-		case JCTree.MOD_ASG:
-		case JCTree.APPLY:
-		case JCTree.NEWCLASS:
+		case JCTree.PREINC://++A
+		case JCTree.PREDEC://--A
+		case JCTree.POSTINC://A++
+		case JCTree.POSTDEC://A--
+		case JCTree.ASSIGN://=
+		case JCTree.BITOR_ASG:// |=
+		case JCTree.BITXOR_ASG:// ~=
+		case JCTree.BITAND_ASG:// &=
+		case JCTree.SL_ASG://<<=
+		case JCTree.SR_ASG://>>=
+		case JCTree.USR_ASG://>>>=
+		case JCTree.PLUS_ASG://+=
+		case JCTree.MINUS_ASG://-=
+		case JCTree.MUL_ASG://*=
+		case JCTree.DIV_ASG:///=
+		case JCTree.MOD_ASG://%=
+		case JCTree.APPLY://方法调用
+		case JCTree.NEWCLASS:// new
 		case JCTree.ERRONEOUS:
 			return t;
 		default:
