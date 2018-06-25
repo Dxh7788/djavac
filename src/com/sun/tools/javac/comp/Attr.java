@@ -2711,6 +2711,7 @@ public class Attr extends JCTree.Visitor {
                 chk.checkAllDefined(tree.pos(), c);
         }
 
+        //注解不能有继承关系,注解不能有泛型
         if ((c.flags() & ANNOTATION) != 0) {
             if (tree.implementing.nonEmpty())
                 log.error(tree.implementing.head.pos(),
@@ -2722,13 +2723,13 @@ public class Attr extends JCTree.Visitor {
             // Check that all extended classes and interfaces
             // are compatible (i.e. no two define methods with same arguments
             // yet different return types).  (JLS 8.4.6.3)
-            // 所有的继承类和接口没有同名方法/参数/和返回值
+            // 所有的继承类和接口没有同名方法/参数/和返回值,校验类继承的类或者接口中没有同名方法
             chk.checkCompatibleSupertypes(tree.pos(), c.type);
         }
 
         // Check that class does not import the same parameterized interface
         // with two different argument lists.
-        // 没有导入相同泛型使用相同参数列表
+        // 累没有导入相同的参数化接口,它们使用不同参数列表
         chk.checkClassBounds(tree.pos(), c.type);
 
         tree.type = c.type;
@@ -2742,27 +2743,33 @@ public class Attr extends JCTree.Visitor {
         }
 
         // Check that a generic class doesn't extend Throwable
-        // 泛型类不能继承Throwable
+        // 泛型类不能继承Throwable,例如
+        //public class DaaaA<T> extends  Throwable{}是不允许的
+        //类的类型参数不为空并且是Throwable的子类
         if (!c.type.allparams().isEmpty() && types.isSubtype(c.type, syms.throwableType))
             log.error(tree.extending.pos(), "generic.throwable");
 
         // Check that all methods which implement some
         // method conform to the method they implement.
+        //校验方法继承是否合理,比如接口和实现类的方法名是否一致,有override的方法是否存在于接口声明中,只校验从Object方法中实现而后由类记性重载的方法
         chk.checkImplementations(tree);
 
         for (List<JCTree> l = tree.defs; l.nonEmpty(); l = l.tail) {
             // Attribute declaration 加入声明属性
             attribStat(l.head, env);
             // Check that declarations in inner classes are not static (JLS 8.1.2)
-            // Make an exception for static constants. 内部类不能使用static,静态常量产生一个异常
+            // Make an exception for static constants.
+            // 内部类的方法不能使用静态修饰符static,常量也不能使用静态修饰符static
             if (c.owner.kind != PCK &&
                 ((c.flags() & STATIC) == 0 || c.name == names.empty) &&
                 (TreeInfo.flags(l.head) & (STATIC | INTERFACE)) != 0) {
                 Symbol sym = null;
                 if (l.head.getTag() == JCTree.VARDEF) sym = ((JCVariableDecl) l.head).sym;
+                //sym == null ||sym.kind != VAR ||((VarSymbol) sym).getConstValue() == null代表该def是内部类
                 if (sym == null ||
                     sym.kind != VAR ||
                     ((VarSymbol) sym).getConstValue() == null)
+                    //inner class cann't have static declaration
                     log.error(l.head.pos(), "icls.cant.have.static.decl");
             }
         }

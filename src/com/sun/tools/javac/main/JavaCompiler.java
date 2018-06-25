@@ -1143,6 +1143,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
                                   env.enclClass.sym.sourcefile :
                                   env.toplevel.sourcefile);
         try {
+            //添加类属性
             attr.attribClass(env.tree.pos(), env.enclClass.sym);
             compileStates.put(env, CompileState.ATTR);
         }
