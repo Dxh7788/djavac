@@ -855,8 +855,9 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
 
             case BY_TODO:
                 while (!todo.isEmpty()) {
-                    //属性赋值
+                    //属性检查和部分属性赋值,主要做属性检查,和Check一起使用,属性检查也可以理解为是否有语法错误
                     Env<AttrContext> attrEnv = attribute(todo.remove());
+                    //数据流分析,主要来确定变量的定义和使用.
                     Queue<Env<AttrContext>> atrrEnvQueue = flow(attrEnv);
                     Queue<Pair<Env<AttrContext>, JCClassDecl>> pairQueue = desugar(atrrEnvQueue);
                     generate(pairQueue);

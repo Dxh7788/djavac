@@ -63,8 +63,11 @@ public class TreeScanner extends Visitor {
  ****************************************************************************/
 
     public void visitTopLevel(JCCompilationUnit tree) {
+        //扫描包注释
         scan(tree.packageAnnotations);
+        //扫描包
         scan(tree.pid);
+        //扫描类定义
         scan(tree.defs);
     }
 

@@ -575,19 +575,20 @@ public class Flow extends TreeScanner {
         lint = lint.augment(tree.sym.attributes_field);
 
         try {
-            // define all the static fields
+            // define all the static fields 定义所有静态属性
             for (List<JCTree> l = tree.defs; l.nonEmpty(); l = l.tail) {
                 if (l.head.getTag() == JCTree.VARDEF) {
                     JCVariableDecl def = (JCVariableDecl)l.head;
                     if ((def.mods.flags & STATIC) != 0) {
                         VarSymbol sym = def.sym;
+                        //trackable(sym)是否需要报告初始化问题
                         if (trackable(sym))
                             newVar(sym);
                     }
                 }
             }
 
-            // process all the static initializers
+            // process all the static initializers 处理所有静态初始化块
             for (List<JCTree> l = tree.defs; l.nonEmpty(); l = l.tail) {
                 if (l.head.getTag() != JCTree.METHODDEF &&
                     (TreeInfo.flags(l.head) & STATIC) != 0) {
@@ -614,7 +615,7 @@ public class Flow extends TreeScanner {
                 }
             }
 
-            // define all the instance fields
+            // define all the instance fields定义所有实例属性
             for (List<JCTree> l = tree.defs; l.nonEmpty(); l = l.tail) {
                 if (l.head.getTag() == JCTree.VARDEF) {
                     JCVariableDecl def = (JCVariableDecl)l.head;
@@ -626,7 +627,7 @@ public class Flow extends TreeScanner {
                 }
             }
 
-            // process all the instance initializers
+            // process all the instance initializers 处理所有对象初始化
             for (List<JCTree> l = tree.defs; l.nonEmpty(); l = l.tail) {
                 if (l.head.getTag() != JCTree.METHODDEF &&
                     (TreeInfo.flags(l.head) & STATIC) == 0) {
@@ -649,7 +650,7 @@ public class Flow extends TreeScanner {
                 thrownPrev = chk.union(thrown, thrownPrev);
             }
 
-            // process all the methods
+            // process all the methods,处理所有方法
             for (List<JCTree> l = tree.defs; l.nonEmpty(); l = l.tail) {
                 if (l.head.getTag() == JCTree.METHODDEF) {
                     scan(l.head);
@@ -1251,11 +1252,11 @@ public class Flow extends TreeScanner {
     public void analyzeTree(JCTree tree, TreeMaker make) {
         try {
             this.make = make;
-            inits = new Bits();
-            uninits = new Bits();
-            uninitsTry = new Bits();
+            inits = new Bits();//初始化值
+            uninits = new Bits();//未初始化值
+            uninitsTry = new Bits();//未初始化尝试
             initsWhenTrue = initsWhenFalse =
-                uninitsWhenTrue = uninitsWhenFalse = null;
+                uninitsWhenTrue = uninitsWhenFalse = null;//编译时能确定真值的优化
             if (vars == null)
                 vars = new VarSymbol[32];
             else
